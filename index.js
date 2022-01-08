@@ -4,10 +4,10 @@ const port = 8000;
 const path = require('path');
 const db = require('./config/database');
 const cookieParser = require("cookie-parser");
-
 //middleware 
 app.use(express.urlencoded());
 app.use(cookieParser());
+
 
 
 app.use('/' , require('./routes'));
