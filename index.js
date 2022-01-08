@@ -2,6 +2,7 @@ const express = require("express");
 const app =  express();
 const port = 8000;
 const path = require('path');
+const db = require('./config/database');
 const cookieParser = require("cookie-parser");
 
 //middleware 
