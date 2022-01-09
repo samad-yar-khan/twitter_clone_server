@@ -5,7 +5,7 @@ const environment = require('../../../config/environment');
 
 
 module.exports.create = async function (req, res) {
-	console.log("req.body from users_api", req.body);
+	// console.log("req.body from users_api", req.body);
 
     if(req.body.password != req.body.confirmPassword){
         return res.status(200).json({
@@ -22,15 +22,15 @@ module.exports.create = async function (req, res) {
             let user_same_user_name = await User.findOne({user_name : req.body.user_name});
             if(!user_same_user_name){
 
-                let new_user = User.create(req.body);
+                let new_user = await User.create(req.body);
 
                 return res.status(200).json({
 					success: true,
 					message: "You have signed up, sign in to continue!",
-					// data: {
-					// 	token: jwt.sign(new_user.toJSON(), env.jwt_secret, { expiresIn: "1000000" }),
-					// 	user: user,
-					// },
+					data: {
+						// token: jwt.sign(new_user.toJSON(), env.jwt_secret, { expiresIn: "1000000" }),
+						user: new_user,
+					},
 				});
 
 
@@ -67,8 +67,9 @@ module.exports.createSession = async function(req , res){
 
     try {
         let user = await User.findOne({email:req.body.email});
-        console.log(req.body.password);
-        if(!user || user.password != req.body.password){
+
+
+        if(!user || !user.isValidPassword(req.body.password)){
         
             return res.json(422, {
                 success:false ,
@@ -76,6 +77,8 @@ module.exports.createSession = async function(req , res){
             });
 
         }
+
+        delete user.password;
 
         return res.json(200,{
             success:true,

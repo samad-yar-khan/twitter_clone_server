@@ -45,7 +45,7 @@ const production = {
     // asset_path : process.env.CODIAL_ASSET_PATH,
     // session_cookie_key : process.env.CODIAL_SESSION_COOKIE_KEY, //using random key gen .com
     db : process.env.TWITTER_DB, //here we add the db name
-    db_pass : process.env.TWITTER_DB_PASS
+    db_pass : process.env.TWITTER_DB_PASS,
     // smtp :{
 
     //     service : 'gmail' ,
@@ -62,7 +62,7 @@ const production = {
     // google_client_id : process.env.CODIAL_GOOGLE_CLIENT_ID,
     // google_client_secret: process.env.CODIAL_GOOGLE_CLIENT_SECRET,
     // google_callback_url : process.env.CODIAL_GOOGLE_CALLBACK_URL,//same as set in google while regesterings
-    // jwt_secret : process.env.CODIAL_JWT_SECRET,//using random key gen .com
+    jwt_secret : process.env.TWITTER_JWT_SECRET,//using random key gen .com
     // morgan : {
     //     mode : "combined",
     //     options : {stream : AccessLogStream}

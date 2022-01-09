@@ -9,7 +9,6 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 
-
 app.use('/' , require('./routes'));
 
 app.listen(port , (err)=>{
