@@ -3,11 +3,8 @@ const express = require("express");
 const router = express.Router();
 
 
-console.log("ApiV1 loaded!");
-
-
-
-
+router.use('/tweets' , require('./tweets') );
+router.use('/users' , require('./user'));
 
 
 module.exports = router;
