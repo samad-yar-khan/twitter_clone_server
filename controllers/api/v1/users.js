@@ -1,6 +1,8 @@
 const User = require('../../../models/user');
+const Tweets = require('../../../models/tweets');
+const Follow = require('../../../models/follow');
 const jwt = require('jsonwebtoken');
-const passport = require('passport')
+const passport = require('passport');
 const environment = require('../../../config/environment');
 
 
@@ -98,3 +100,31 @@ module.exports.createSession = async function(req , res){
 
 
 }
+
+
+
+module.exports.profile = async function (req, res) {
+
+    console.log(req.params.id);
+	try {
+		let user = await User.findById(req.params.id);
+		let user_tweets = await Tweets.find({ user: req.params.id });
+        
+        // let following = await Follow.find({from_user : req.params.id }, {_id : 1, to_user : 1});
+        
+
+		return res.status(200).json({
+			message: "User profile fetched successfully!",
+			data: {
+				profile_user: user,
+				user_tweets: user_tweets,
+			},
+			success: true,
+		});
+	} catch (err) {
+		console.log("Error in fetching user profile******", err);
+		return res.status(500).json({
+			message: "Internal server error",
+		});
+	}
+};

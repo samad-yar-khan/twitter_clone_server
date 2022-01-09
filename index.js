@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 //middleware 
 app.use(express.urlencoded());
 app.use(cookieParser());
+const passport = require("passport");
+const passportStrategy = require("./config/passport");
 
 
 app.use('/' , require('./routes'));
