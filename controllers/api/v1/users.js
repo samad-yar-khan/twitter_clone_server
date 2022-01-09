@@ -86,7 +86,7 @@ module.exports.createSession = async function(req , res){
             success:true,
             message :"Sign in sucessfull , here is your token . Keep it safe !",
             data :{
-                token : jwt.sign(user.toJSON() , environment.jwt_secret ,  {expiresIn : '1000000'})//toJSON converts the user to json and codial is the secret encryption key usin which we decrypt and encrypt the jwt
+                token : jwt.sign(user.toJSON() , environment.jwt_secret ,  {expiresIn : '100000000'})//toJSON converts the user to json and codial is the secret encryption key usin which we decrypt and encrypt the jwt
             }
         })
 
@@ -107,6 +107,7 @@ module.exports.profile = async function (req, res) {
 
     console.log(req.params.id);
 	try {
+
 		let user = await User.findById(req.params.id);
 		let user_tweets = await Tweets.find({ user: req.params.id });
         
@@ -126,5 +127,77 @@ module.exports.profile = async function (req, res) {
 		return res.status(500).json({
 			message: "Internal server error",
 		});
+	}
+};
+
+
+
+module.exports.follow = async function (req, res) {
+	if (req.user.id === req.params.id) {
+		return res.status(403).json({
+            success:false,
+			message: "You can't follow yourself!",
+		});
+	} else {
+		try {
+
+            let relationShip = await Follow.findOne({from_user : req.user.id , to_user :  req.params.id});
+
+			// if user does not already follows toFollowUSer
+			if (!relationShip) {
+				
+                let newFollowRelationShip = await Follow.create({from_user : req.user.id , to_user :  req.params.id});
+
+				return res.status(200).json({
+					message: "You started following this user!",
+					success: true,
+                    newFollowRelationShip
+				});
+			} else {
+				return res.status(403).json({
+                    success:false,
+					message: "You already follow this user",
+				});
+			}
+		} catch (error) {
+			console.log("Error", error);
+			return res.status(500).json({
+                success:false,
+				message: error,
+			});
+		}
+	}
+};
+
+module.exports.unfollow = async function (req, res) {
+	if (req.user.id === req.params.id) {
+		return res.status(403).json({
+            success:false,
+			message: "You can't unfollow yourself!",
+		});
+	} else {
+		try {
+		
+            let relationShip = await Follow.findOne({from_user : req.user.id , to_user :  req.params.id});
+			if (relationShip) {
+				
+                relationShip.remove();
+                relationShip.update();
+
+				return res.status(200).json({
+					message: "You have unfollowed this user!",
+					success: true,
+				});
+			} else {
+				return res.status(403).json({
+                    success:false,
+					message: "You do not follow this user",
+				});
+			}
+		} catch (error) {
+			return res.status(500).json({
+				message: error,
+			});
+		}
 	}
 };
