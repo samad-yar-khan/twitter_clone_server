@@ -105,20 +105,74 @@ module.exports.createSession = async function(req , res){
 
 module.exports.profile = async function (req, res) {
 
-    console.log(req.params.id);
+    // console.log(req.params.id);
 	try {
 
-		let user = await User.findById(req.params.id);
+		let user = await User.findById(req.params.id , {
+            'password' :0,
+            '__v':0 ,
+            'createdAt':0,
+            'updatedAt':0
+        });
 		let user_tweets = await Tweets.find({ user: req.params.id });
         
-        // let following = await Follow.find({from_user : req.params.id }, {_id : 1, to_user : 1});
-        
+        let following = await Follow.find(
+            {
+                from_user : req.params.id 
+            },
+            {
+                '_id':0,
+                'from_user':0,
+                '__v':0 ,
+                'createdAt':0,
+                'updatedAt':0
+            })
+            .populate({
+                path :'to_user',
+                select :{
+                    'name_' : 1 ,
+                    'email' : 1,
+                    'id':1 , 
+                    'user_name' :1
+                }
+            });
+        // let followingList =  following.map(async (f) =>  {
+        // // let fellowUser = await User.findById(f.to_user);
+      
+        // // return fellowUser;
+        // // }
+        // // );
 
+        let followers = await Follow.find(
+            {
+                to_user : req.params.id
+            },
+            {
+                '_id':0,
+                'to_user':0,
+                '__v':0 ,
+                'createdAt':0 ,
+                'updatedAt':0
+            })
+            .populate({
+                path :'from_user',
+                select :{
+                    'name_' : 1 , 
+                    'email' : 1,
+                    'id':1 , 
+                    'user_name' :1
+                }
+            });
+
+        
+           
 		return res.status(200).json({
 			message: "User profile fetched successfully!",
 			data: {
 				profile_user: user,
 				user_tweets: user_tweets,
+                followers,
+                following
 			},
 			success: true,
 		});
@@ -201,3 +255,9 @@ module.exports.unfollow = async function (req, res) {
 		}
 	}
 };
+
+module.exports.followerList = async function (req,res){
+   
+    
+   
+}
