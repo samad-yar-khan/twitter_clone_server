@@ -1,4 +1,4 @@
-<h1 align="center">
+h1 align="center">
     Micro-Blogging Platform
 </h1>
 
@@ -33,31 +33,265 @@
 3. Use [http://localhost:8000](http://localhost:8000) as the root for all API's.
 
 
-## API DOCUMENTATION 
+## 💻 API DOCUMENTATION 
+
+#### Endpoints
+- API_ROOT -
+- Authorization required - Requests require the JWT token. Set Authorization : Bearer <token> in header.
+- Query params - Just add the params in the url 
+- Form body - Send as body in fetch request 
 
 ### 1)USER  
 
-1. Login 
+#### 1. Login 
+
+- POST
+- End point - API_ROOT/api/v1/users/login 
+- Authorization Required - No
+- Form body
+  - email - String
+  - password - String
+
+- Returns a JWT to be used for further authentication
+
+- Returns JSON 
+
+```
+{
+"success": true,
+"message": "Sign in successfull , here is your token . Keep it safe !",
+
+"data": {
+        "token": "<token>"
+      }
+}
+```
+
+
+#### 2. SignUp 
+
+- POST
+- End point - API_ROOT/api/v1/users/signup 
+- Authorization Required - No
+- Form body 
+  - email - String
+  - password - String
+  - confirmPassword - String
+  - name_ - String
+  - user_name - String
+
+#### 3. Profile
+
+- GET
+- End point - API_ROOT/api/v1/users/profile/:id
+- Authorization Required - Yes
+- Params - Add user.id as param to get the user profile data
+
+
+
+- Returns JSON 
+
+```
+{
+    "message": "User profile fetched successfully!",
+    "data": {
+        "profile_user": {
+            "_id": "61dc26d6843e7ea2438aa267",
+            "email": "smdyarkhan00000@gmail.com",
+            "user_name": "sameer",
+            "name_": "sameer"
+        },
+        "user_tweets": [
+            {
+                "_id": "61dc272b843e7ea2438aa26b",
+                "content": "Hi I am sameer !",
+                "user": "61dc26d6843e7ea2438aa267",
+                "createdAt": "2022-01-10T12:31:39.302Z",
+                "updatedAt": "2022-01-10T12:31:39.302Z",
+                "__v": 0
+            }
+        ],
+        "followers": [
+            {
+                "from_user": {
+                    "_id": "61db0c55119bd2efa6eda67e",
+                    "email": "smdyarkhan0000@gmail.com",
+                    "user_name": "sam2",
+                    "name_": "samad"
+                }
+            }
+        ],
+        "following": []
+    },
+    "success": true
+}
+```
+
+#### 4. Following User
+
+- POST
+- End point - API_ROOT/api/v1/users/follow/:id
+- Authorization Required - Yes
+- Params - Add user.id as param to get the user profile data
+- Returns JSON 
+
+```
+{
+    "message": "You started following this user!",
+    "success": true,
+    "newFollowRelationShip": {
+        "from_user": "61dc26d6843e7ea2438aa267",
+        "to_user": "61db0c55119bd2efa6eda67e",
+        "_id": "61dc4f6acedf8581b0f7810d",
+        "createdAt": "2022-01-10T15:23:23.010Z",
+        "updatedAt": "2022-01-10T15:23:23.010Z",
+        "__v": 0
+    }
+}
+```
+
+#### 5. Unollowing User
+
+- POST
+- End point - API_ROOT/api/v1/users/unfollow/:id
+- Authorization Required - Yes
+- Params - Add user.id as param to get the user profile data
+- Returns JSON 
+
 
 
 
 ### 2)TWEETS
-The Auto fill component is a stateless contolled component which takes props from its parent , which report its channges to the parents and fetch results accordingly.
+
+Tweets are like micro blogs and we have the functionality to create, delete and fetch our tweets and the tweets of the people whom we follow.
+
+#### 1. Create a new Tweet 
+
+- POST
+- End point - API_ROOT/api/v1/tweets/create 
+- Authorization Required - Yes
+- Form body
+  - content - String (less than 140 chars)
+
+- Returns the following upon success
+
+```
+{
+    "data": {
+        "tweet": {
+            "content": "Feeling a little sick !",
+            "user": {
+                "_id": "61dc26d6843e7ea2438aa267",
+                "email": "smdyarkhan00000@gmail.com",
+                "user_name": "sameer",
+                "name_": "sameer"
+            },
+            "_id": "61dc5265cedf8581b0f78115",
+            "createdAt": "2022-01-10T15:36:05.373Z",
+            "updatedAt": "2022-01-10T15:36:05.373Z",
+            "__v": 0
+        }
+    },
+    "message": "Tweets created!",
+    "success": true
+}
+```
+#### 2. Delete Your Tweet 
+
+- DELETE
+- End point - API_ROOT/api/v1/tweets/delete/:id
+- Authorization Required - Yes
+
+```
+{
+    "message": "Tweet deleted successfully",
+    "success": true
+}
+```
+
+#### 3.  Get your own tweets (sorted by latest)
+
+- GET
+- End point - API_ROOT/api/v1/tweets/self
+- Authorization Required - Yes
+- JSON Response
+
+```
+{
+    "message": "Tweet fetched successfully",
+    "success": true,
+    "myTweets": [
+        {
+            "_id": "61dc5265cedf8581b0f78115",
+            "content": "Feeling a little sick !",
+            "user": "61dc26d6843e7ea2438aa267",
+            "createdAt": "2022-01-10T15:36:05.373Z",
+            "updatedAt": "2022-01-10T15:36:05.373Z",
+            "__v": 0
+        },
+        {
+            "_id": "61dc272b843e7ea2438aa26b",
+            "content": "Hi I am sameer !",
+            "user": "61dc26d6843e7ea2438aa267",
+            "createdAt": "2022-01-10T12:31:39.302Z",
+            "updatedAt": "2022-01-10T12:31:39.302Z",
+            "__v": 0
+        }
+    ]
+}
+```
+
+#### 4.  Get tweets by the people you follow (sorted by latest)
+
+- GET
+- End point - API_ROOT/api/v1/tweets/timeline
+- Authorization Required - Yes
+
+- JSON Reponse 
+
+
+```
+{
+    "message": "Tweet fetched successfully",
+    "success": true,
+    "tweets": [
+        {
+            "_id": "61dc5265cedf8581b0f78115",
+            "content": "Feeling a little sick !",
+            "user": {
+                "_id": "61dc26d6843e7ea2438aa267",
+                "user_name": "sameer",
+                "name_": "sameer"
+            },
+            "createdAt": "2022-01-10T15:36:05.373Z",
+            "updatedAt": "2022-01-10T15:36:05.373Z",
+            "__v": 0
+        },
+        {
+            "_id": "61dc2777843e7ea2438aa274",
+            "content": "Too cloud  today !",
+            "user": {
+                "_id": "61dabcff577930f23b4c7292",
+                "user_name": "sam",
+                "name_": "samad"
+            },
+            "createdAt": "2022-01-10T12:32:55.210Z",
+            "updatedAt": "2022-01-10T12:32:55.210Z",
+            "__v": 0
+        }
+    ]
+}
+
+```
 
 
 
-## 💻 Working/WorkFlow
-
-### 1)Input
-The AutoFill component has an event handler which calls the handleChange function whenever a change is done to the input.
 
 
-### 2)handleChange 
-The handle change function will make an api call for the incomplete word of the input and fetch suggestions from the server.
 
 
-### 3)Caching (Optimisation using Trie)
-In an effort to minimise redundant API Calls we have used a Trie for which stores the suggestions for different prefexes. The Trie is stored in our Cache(local storage of user) and is reset every 30 seconds. The system is checked for pre-existing Trie in Cache whenever the component is rendered.  
+
+  
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.Please make sure to update tests as appropriate.
@@ -78,7 +312,8 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 1. Knowledge of git & github.
 2. JavaScript
-3. [ReactJS](https://reactjs.org/)
+3. MongoDB
+4. Node.js
+5. Express.js
 
-## Feel free to test the hosted  version of the component and dont forget to star the repo if it proves helpful !
-
+## Feel free to test the project and don't forget to star the repo if it proves helpful !
