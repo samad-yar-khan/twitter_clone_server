@@ -160,6 +160,95 @@
 
 
 
+#### 6. Fetching All Users
+
+- All
+- End point - API_ROOT/api/v1/users/all/
+- Authorization Required - Yes
+- Params - Add user.id as param to get the user profile data
+
+
+- Returns JSON 
+
+```
+
+{
+    "message": "usersFetched !",
+    "success": true,
+    "users": [
+        {
+            "_id": "61dabcff577930f23b4c7292",
+            "email": "smdyarkhan00@gmail.com",
+            "user_name": "sam",
+            "name_": "samad"
+        },
+        {
+            "_id": "61db0c55119bd2efa6eda67e",
+            "email": "smdyarkhan0000@gmail.com",
+            "user_name": "sam2",
+            "name_": "samad"
+        },
+        {
+            "_id": "61dc26d6843e7ea2438aa267",
+            "email": "smdyarkhan00000@gmail.com",
+            "user_name": "sameer",
+            "name_": "sameer"
+        },
+        {
+            "_id": "61ddd182e4b6cc3bfc729c3c",
+            "email": "smdyarkhan123@gmail.com",
+            "user_name": "samad",
+            "name_": "samad"
+        }
+    ]
+}
+
+
+```
+
+#### 7. Finding a Users
+
+- POST
+- End point - API_ROOT/api/v1/users/search/
+- Authorization Required - Yes
+- Form body
+  - search_text - String
+- Returns JSON 
+
+
+```
+
+{
+    "message": "usersFetched !",
+    "success": true,
+    "usersByName": [
+        {
+            "_id": "61dabcff577930f23b4c7292",
+            "email": "smdyarkhan00@gmail.com",
+            "user_name": "sam",
+            "name_": "samad"
+        },
+        {
+            "_id": "61db0c55119bd2efa6eda67e",
+            "email": "smdyarkhan0000@gmail.com",
+            "user_name": "sam2",
+            "name_": "samad"
+        }
+    ],
+    "usersByUserName": [
+        {
+            "_id": "61ddd182e4b6cc3bfc729c3c",
+            "email": "smdyarkhan123@gmail.com",
+            "user_name": "samad",
+            "name_": "samad"
+        }
+    ]
+}
+
+```
+
+
+
 
 ### 2)TWEETS
 

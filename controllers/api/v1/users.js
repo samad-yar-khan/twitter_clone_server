@@ -111,6 +111,7 @@ module.exports.findUsers = async function(req,res){
 
 module.exports.create = async function (req, res) {
 	// console.log("req.body from users_api", req.body);
+    // console.log(req.body);
 
     if(req.body.password != req.body.confirmPassword){
         return res.status(200).json({
@@ -169,6 +170,8 @@ module.exports.create = async function (req, res) {
 
 
 module.exports.createSession = async function(req , res){
+
+    // console.log(req.body);
 
     try {
         let user = await User.findOne({email:req.body.email});
