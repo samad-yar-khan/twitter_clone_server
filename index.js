@@ -11,6 +11,9 @@ app.use(cookieParser());
 const passport = require("passport");
 const passportStrategy = require("./config/passport");
 
+var cors = require('cors')
+
+app.use(cors()) // Use this after the variable declaration
 
 app.use('/' , require('./routes'));
 
@@ -20,7 +23,6 @@ app.listen(port , (err)=>{
     }else{
         console.log(`Server Up and Running on port ${port}`);
     }
-
 })
 
 
