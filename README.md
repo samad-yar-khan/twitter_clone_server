@@ -36,7 +36,7 @@
 ## 💻 API DOCUMENTATION 
 
 #### Endpoints
-- API_ROOT -
+- API_ROOT - https://micro-blogging-platform-server.herokuapp.com 
 - Authorization required - Requests require the JWT token. Set Authorization : Bearer <token> in header.
 - Query params - Just add the params in the url 
 - Form body - Send as body in fetch request 
