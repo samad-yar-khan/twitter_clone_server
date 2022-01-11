@@ -5,6 +5,109 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const environment = require('../../../config/environment');
 
+module.exports.allUsers = async function(req,res){
+
+    try{
+
+        let users = await User.find({},{
+            'password' :0,
+            '__v':0 ,
+            'createdAt':0,
+            'updatedAt':0}
+        );
+        if(users){
+
+            return res.status(200).json({
+                message: "usersFetched !",
+                success :true ,
+                users
+            });
+
+        }else{
+
+            return res.json(200 , {
+                success:false,
+                message:"Cant fetch users !"
+            })
+
+        }
+
+
+    }catch(err){
+        return res.json(500 , {
+            error_message : err,
+            success:false,
+            message:"Internal Server Error!"
+        })
+    }
+  
+
+    
+
+}
+
+module.exports.findUsers = async function(req,res){
+
+    let searchText = req.body.search_text;
+    try{
+        // console.log(searchText);
+        if(searchText.length > 0){
+            let usersByName = await User.find({name_ : searchText},{
+                'password' :0,
+                '__v':0 ,
+                'createdAt':0,
+                'updatedAt':0}
+            );
+            let usersByUserName = await User.find({user_name : searchText},{
+                'password' :0,
+                '__v':0 ,
+                'createdAt':0,
+                'updatedAt':0}
+            );
+            if(usersByName.length >0 || usersByUserName.length>0 ){
+    
+                return res.status(200).json({
+                    message: "usersFetched !",
+                    success :true ,
+                    usersByName,
+                    usersByUserName
+                });
+    
+            }else{
+    
+                return res.json(200 , {
+                    success:false,
+                    message:"Cant fetch users !"
+                })
+    
+            }
+    
+        }else{
+            return res.json(200 , {
+                success:false,
+                message:"Cant fetch users !"
+            })
+        }
+       
+
+    }catch(err){
+        console.log(err);
+        return res.json(500 , {
+            error_message : err,
+            success:false,
+            message:"Internal Server Error!"
+        })
+    }
+    // let users = await User.find({},{
+    //     'password' :0,
+    //     '__v':0 ,
+    //     'createdAt':0,
+    //     'updatedAt':0}
+    // );
+
+    
+
+}
 
 module.exports.create = async function (req, res) {
 	// console.log("req.body from users_api", req.body);
