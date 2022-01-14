@@ -209,7 +209,7 @@
 #### 7. Finding a Users
 
 - POST
-- End point - API_ROOT/api/v1/users/search/
+- End point - API_ROOT/api/v1/users/find/
 - Authorization Required - Yes
 - Form body
   - search_text - String

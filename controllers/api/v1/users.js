@@ -52,18 +52,18 @@ module.exports.findUsers = async function(req,res){
     try{
         // console.log(searchText);
         if(searchText.length > 0){
-            let usersByName = await User.find({name_ : searchText},{
+            let usersByName = await User.find({name_ : { $regex: searchText ,$options: 'i'}},{
                 'password' :0,
                 '__v':0 ,
                 'createdAt':0,
                 'updatedAt':0}
-            );
-            let usersByUserName = await User.find({user_name : searchText},{
+            ).limit(20);
+            let usersByUserName = await User.find({user_name : { $regex: searchText ,$options: 'i'}},{
                 'password' :0,
                 '__v':0 ,
                 'createdAt':0,
                 'updatedAt':0}
-            );
+            ).limit(20);
             if(usersByName.length >0 || usersByUserName.length>0 ){
     
                 return res.status(200).json({
@@ -362,8 +362,3 @@ module.exports.unfollow = async function (req, res) {
 	}
 };
 
-module.exports.followerList = async function (req,res){
-   
-    
-   
-}
