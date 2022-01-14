@@ -48,6 +48,7 @@ module.exports.allUsers = async function(req,res){
 
 module.exports.findUsers = async function(req,res){
 
+    
     let searchText = req.body.search_text;
     try{
         // console.log(searchText);
