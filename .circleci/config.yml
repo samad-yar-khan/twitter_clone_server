@@ -34,37 +34,30 @@ workflows:
       - say-bye:
           requires:
             - say-hello
-      - setup-failure:
-          requires:
-            - say-bye
 
   failing-workflow:
     jobs:
       - say-hello
+      - setup-failure
       - say-bye:
           requires:
-            - say-hello
             - setup-failure
 
   canceled-workflow:
     jobs:
       - say-hello
+      - setup-failure
       - say-bye:
           requires:
-            - say-hello
-      - setup-failure:
-          requires:
-            - say-bye
+            - setup-failure
 
   on-hold-workflow:
     jobs:
       - say-hello
+      - setup-failure
       - say-bye:
           requires:
-            - say-hello
-      - setup-failure:
-          requires:
-            - say-bye
+            - setup-failure
 
   success-workflow:
     jobs:
