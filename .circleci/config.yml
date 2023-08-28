@@ -1,0 +1,94 @@
+version: 2.1
+
+jobs:
+  say-hello:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
+  say-bye:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Say bye"
+          command: "echo Bye, World!"
+
+  setup-failure:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Simulate setup failure"
+          command: "exit 1"
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Say Deploy"
+          command: "echo Deploy"
+
+  hold:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Say hold"
+          command: "echo hold"
+
+workflows:
+  running-workflow:
+    jobs:
+      - say-hello
+      - say-bye:
+          requires:
+            - say-hello
+
+  failing-workflow:
+    jobs:
+      - say-hello
+      - setup-failure
+      - say-bye:
+          requires:
+            - setup-failure
+
+  canceled-workflow:
+    jobs:
+      - say-hello
+      - setup-failure
+      - say-bye:
+          requires:
+            - setup-failure
+
+  on-hold-workflow:
+    jobs:
+      - say-hello  # your custom job from your config, that builds your code
+      - hold: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          requires: # We only run the "hold" job when test2 has succeeded
+           - say-hello
+      # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      # In this case, a user is manually triggering the deploy job.
+      - deploy:
+          requires:
+            - hold
+
+  success-workflow:
+    jobs:
+      - say-hello
+      - say-bye:
+          requires:
+            - say-hello
+
+  needs-setup-workflow:
+    jobs:
+      - setup-failure

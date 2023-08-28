@@ -13,7 +13,8 @@ module.exports.allUsers = async function(req,res){
             'password' :0,
             '__v':0 ,
             'createdAt':0,
-            'updatedAt':0}
+            'updatedAt':0
+            }
         );
         if(users){
 
